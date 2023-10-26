@@ -62,7 +62,45 @@ public class Empresa {
 		return false;
 	}
 
-
+	/**
+	 * Borra un empleado conociendo su identificador
+	 * 
+	 * @param identificador
+	 * @return true si es borrado, false en caso contrario
+	 */
+	public boolean deleteEmpleado(String id) {
+		String sql = """
+				DELETE FROM empleado
+				WHERE id = ?
+				""";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, id);
+			return ps.executeUpdate() > 0;
+		} catch (SQLException e) {
+		}
+		return false;
+	}
+	
+	/**
+	 * Borra un departamento conociendo su identificador
+	 * 
+	 * @param identificador
+	 * @return true si es borrado, false en caso contrario
+	 */
+	public boolean deleteDepartamento(String id) {
+		String sql = """
+				DELETE FROM departamento
+				WHERE id = ?
+				""";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, id);
+			return ps.executeUpdate() > 0;
+		} catch (SQLException e) {
+		}
+		return false;
+	}
 	
 	/**
 	 * Crea el esquema de la base de datos
