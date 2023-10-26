@@ -12,6 +12,50 @@ public class Empresa {
 		createTables();
 	}
 
+	public boolean addEmpleado(Empleado em) {
+		
+		String sql = """
+				INSERT INTO empleado (id, nombre, salario, departamento)
+				VALUES (?, ?, ?, ?)
+				""";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, em.getId().toString());
+			ps.setString(2, em.getNombre());
+			ps.setString(3, em.getSalario().toString());
+			ps.setString(4, em.getDepartamento().toString());
+			return ps.executeUpdate() > 0;
+		}catch(SQLException e) {
+			}
+		
+		return false;
+	}
+	
+	/**
+	 * Añade un nuevo departamento a la tabla Departamento
+	 * 
+	 * @param c
+	 * @return true si ha sido añadido, false en caso contrario
+	 */
+	
+	public boolean addDepartamento(Departamento d) {
+		
+		String sql = """
+				INSERT INTO departamento (id, nombre,jefe) 
+				VALUES (?, ?, ?)
+				""";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, d.getId().toString());
+			ps.setString(2, d.getNombre());
+			ps.setString(3, d.getJefe().toString());
+			return ps.executeUpdate() > 0;
+		}catch(SQLException e) {
+			}
+		return false;
+	}
+
+
 	
 	/**
 	 * Crea el esquema de la base de datos
