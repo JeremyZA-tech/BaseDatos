@@ -1,7 +1,11 @@
 package vista;
 
+import java.util.Random;
+
 import controlador.Empresa;
 import io.IO;
+import modelo.Departamento;
+import modelo.Empleado;
 
 public class Menu {
 
@@ -62,10 +66,10 @@ public class Menu {
 
             switch (opcion) {
                 case 1:
-
+                	añadirDepartamento(empresa);
                 	break;
                 case 2:
-
+                	mostrarDepartamentos(empresa);
                 	break;
                 case 3:
 
@@ -114,5 +118,49 @@ public class Menu {
                     break;
             }
         }
+    }
+    
+    private static void añadirDepartamento(Empresa empresa) {
+    	IO.print("¿Desea añadir el departamento con jefe (1) o sin jefe (2)?");
+        int opcion = IO.readInt();
+
+        if (opcion == 1) {
+            // Añadir el departamento con jefe
+            IO.print("Nombre del departamento: ");
+            String nombre = IO.readString();
+            IO.print("Nombre del Jefe de departamento: ");
+            String nombreJefe = IO.readString();
+            if (nombreJefe.isEmpty()) {
+                IO.print("El nombre del jefe no puede estar vacío");
+                return;
+            }
+            Empleado jefe = new Empleado(nombreJefe);
+
+            // Generar un id aleatorio
+            Random random = new Random();
+            int id = random.nextInt(10000);
+
+            // Añadir el departamento a la empresa
+            boolean anadido = empresa.addDepartamento(new Departamento(id, nombre, jefe));
+            IO.print(anadido ? "Añadido" : "No se ha podido añadir");
+        } else if (opcion == 2) {
+            // Añadir el departamento sin jefe
+            IO.print("Nombre del departamento: ");
+            String nombre = IO.readString();
+
+            // Generar un id aleatorio
+            Random random = new Random();
+            int id = random.nextInt(10000);
+
+            // Añadir el departamento a la empresa
+            boolean anadido = empresa.addDepartamento(new Departamento(id, nombre));
+            IO.print(anadido ? "Añadido\n" : "No se ha podido añadir\n");
+        } else {
+            IO.print("Opción incorrecta");
+        }
+    }
+    
+    private static void mostrarDepartamentos(Empresa empresa) {
+    	System.out.println(empresa.showDepart());
     }
 }
