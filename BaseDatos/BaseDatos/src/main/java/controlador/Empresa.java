@@ -19,6 +19,13 @@ public class Empresa {
 		conn = BaseDatos.getConnection();
 		createTables();
 	}
+	
+	/**
+	 * Cierra la agenda
+	 */
+	public void close() {
+		BaseDatos.close();
+	}
 
 	public boolean addEmpleado(Empleado em) {
 
@@ -54,9 +61,14 @@ public class Empresa {
 				""";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, d.getId().toString());
+			ps.setInt(1, d.getId());
 			ps.setString(2, d.getNombre());
-			ps.setString(3, d.getJefe().toString());
+			// Si el jefe es nulo, establece el valor de la columna 'jefe' a nulo en la base de datos.
+			if (d.getJefe() == null) {
+				ps.setNull(3, Types.NULL);
+			} else {
+				ps.setString(3, d.getJefe().getNombre());
+			}
 			return ps.executeUpdate() > 0;
 		} catch (SQLException e) {
 		}
@@ -102,6 +114,97 @@ public class Empresa {
 		}
 		return false;
 	}
+
+	/**
+	 * Mostrar los departamentos
+	 * 
+	 * @return cadena con los departamentos
+	 */
+	
+	public String showDepart() {
+		String sql = """
+				SELECT *
+				FROM departamento
+				""";
+		try {
+			StringBuffer sb = new StringBuffer();
+			ResultSet rs = conn.createStatement().executeQuery(sql);
+			if (!rs.first()) {
+				return "La base de datos está vacía.";
+			}
+			while (rs.next()) {
+				Departamento d = readDep(rs);
+				sb.append(d.toString());
+				sb.append("\n");
+			}
+			return sb.toString();
+			
+		}catch(SQLException e) {
+			return e.getMessage();
+		}
+	}
+	
+	/**
+	 * Leer un departamento <b>Ver en clase</b>
+	 * 
+	 * @param descriptor de un random access file
+	 * @return departamento
+	 * 
+	 */
+	private Departamento readDep(ResultSet rs) throws SQLException {
+	    Integer id = rs.getInt("id");
+	    String nombre = rs.getString("nombre");
+	    Empleado jefe = rs.getObject("jefe", Empleado.class);
+	    return new Departamento(id, nombre, jefe == null ? null : jefe);
+	}
+	
+	/**
+	 * Mostrar los empleados
+	 * 
+	 * @return cadena con los departamentos
+	 */
+	public String showEmpl() {
+		String sql = """
+				SELECT id, nombre, salario, departamento
+				FROM empleado
+				""";
+		try {
+			StringBuffer sb = new StringBuffer();
+			ResultSet rs = conn.createStatement().executeQuery(sql);
+			while (rs.next()) {
+				Empleado em = readEmpl(rs);
+				sb.append(em.toString());
+				sb.append("\n");
+			}
+			return sb.toString();
+			
+		}catch(SQLException e) {
+			
+		}
+		return "";
+	}
+	
+	/**
+	 * Leer un empleado <b>Ver en clase</b>
+	 * 
+	 * @param descriptor de un random access file
+	 * @return empleado
+	 * 
+	 */
+	
+	private Empleado readEmpl(ResultSet rs) throws SQLException {
+	    if (rs.next()) {
+	        Integer id = rs.getInt("id");
+	        String nombre = rs.getString("nombre");
+	        Double salario = rs.getDouble("salario");
+	        Departamento departamento= rs.getObject("departamento", Departamento.class);
+	        return new Empleado(id, nombre, salario, departamento );
+	    } else {
+	        throw new SQLException("El ResultSet está vacío.");
+	    }
+	}
+	
+
 
 	/**
 	 * Crea el esquema de la base de datos
