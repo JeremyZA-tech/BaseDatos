@@ -172,7 +172,26 @@ public class Menu {
         }
     }
 
-    private static void actualizarDepartamento(Empresa empresa) {}
+        private static void actualizarDepartamento(Empresa empresa) {
+    	
+    	IO.print("Ingresa el ID del departamento que desea actualizar: ");
+        int idDepartamento = IO.readInt();
+        IO.print("Ingresa el nuevo nombre del departamento: ");
+        String nuevoNombre = IO.readString();
+        
+        Departamento departamentoActualizado = new Departamento();
+        departamentoActualizado.setId(idDepartamento);
+        departamentoActualizado.setNombre(nuevoNombre); // Establece el nuevo nombre proporcionado por el usuario
+        
+        boolean actualizado = empresa.updateDepartamento(departamentoActualizado);
+        
+        if (actualizado) {
+            IO.print("El departamento se ha actualizado.");
+        } else {
+            IO.print("No se pudo actualizar.");
+        }
+    }
+	
     private static void añadirEmpleado(Empresa empresa) {}
     private static void mostrarEmpleados(Empresa empresa) {}
 
