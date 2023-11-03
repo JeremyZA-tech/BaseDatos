@@ -206,6 +206,28 @@ public class Menu {
         }
     }
 
-    private static void actualizarEmpleado(Empresa empresa) {}
+    private static void actualizarEmpleado(Empresa empresa) {
+	IO.print("Ingrese el ID del empleado que desea actualizar: ");
+        int idEmpleado = IO.readInt();
+        
+        IO.print("Ingrese el nuevo nombre del empleado: ");
+        String nuevoNombre = IO.readString();
+        
+        IO.print("Ingrese el nuevo salario del empleado: ");
+        double nuevoSalario = IO.readDouble();
+        
+        Empleado empleadoActualizado = new Empleado();
+        empleadoActualizado.setId(idEmpleado);
+        empleadoActualizado.setNombre(nuevoNombre);
+        empleadoActualizado.setSalario(nuevoSalario);
+        
+        boolean actualizado = empresa.updateEmpleado(empleadoActualizado);
+        
+        if (actualizado) {
+            IO.print("Los datos del empleado se actualizaron con exito.");
+        } else {
+            IO.print("No se ha podido actualizar el empleado.");
+        }
+    }
 	
 }
