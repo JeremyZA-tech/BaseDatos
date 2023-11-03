@@ -142,6 +142,31 @@ public class Empresa {
 		return false;
 	}
 
+			/*
+	 * Este es el metodo para actualizar empleado
+	 * @return nos devuelve si no se logra actualizar
+	 */
+	
+	public boolean updateEmpleado(Empleado empleado) {
+	    String sql = "UPDATE empleado SET nombre = ?, salario = ?, departamento = ? WHERE id = ?";
+	    
+	    try {
+	        PreparedStatement ps = conn.prepareStatement(sql);
+	        ps.setString(1, empleado.getNombre());
+	        ps.setDouble(2, empleado.getSalario());
+	        ps.setInt(3, empleado.getDepartamento().getId());
+	        ps.setInt(4, empleado.getId());
+	        
+	        int filasActualizadas = ps.executeUpdate();
+	        
+	        return filasActualizadas > 0;
+	        
+	    } catch (SQLException e) {
+	    }
+	    
+	    return false;
+	}
+
 	 /*
 	 * Actualiza la informacion de un departamento
   	 * @return false si no se llega a ejecutar la actualización
