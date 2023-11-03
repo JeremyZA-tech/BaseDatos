@@ -72,7 +72,7 @@ public class Menu {
                 	mostrarDepartamentos(empresa);
                 	break;
                 case 3:
-
+                	eliminarDepartamento(empresa);
                 	break;
                 case 4:
                 	
@@ -163,4 +163,13 @@ public class Menu {
     private static void mostrarDepartamentos(Empresa empresa) {
     	System.out.println(empresa.showDepart());
     }
+	
+    private static void eliminarDepartamento(Empresa empresa, Int departamentoId) {
+        if (empresa.deleteDepartamento(departamentoId)) {
+            System.out.println("El departamento se eliminó sin problemas.");
+        } else {
+            System.out.println("Ha ocurrido un error al eliminar el departamento");
+        }
+    }
+	
 }
