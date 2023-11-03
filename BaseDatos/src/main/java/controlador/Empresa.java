@@ -160,7 +160,6 @@ public class Empresa {
 	        int filasActualizadas = ps.executeUpdate();
 	        
 	        return filasActualizadas > 0;
-	        
 	    } catch (SQLException e) {
 	    }
 	    
