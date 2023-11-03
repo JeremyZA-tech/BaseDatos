@@ -81,18 +81,28 @@ public class Empresa {
 	 * @param identificador
 	 * @return true si es borrado, false en caso contrario
 	 */
-	public boolean deleteEmpleado(String id) {
-		String sql = """
-				DELETE FROM empleado
-				WHERE id = ?
-				""";
+	
+	public boolean deleteEmpleado(Empleado empleado) {
+		String sqlEliminaEmpleado = "DELETE FROM empleado WHERE id = ?";
+		String sqlActualizaDepartamento = "UPDATE departamento SET jefe = NULL WHERE jefe = ?";
+	    
 		try {
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, id);
-			return ps.executeUpdate() > 0;
-		} catch (SQLException e) {
-		}
-		return false;
+
+	        PreparedStatement psEliminaEmpleado = conn.prepareStatement(sqlEliminaEmpleado);
+	        psEliminaEmpleado.setInt(1, empleado.getId());
+	        int filasEliminadas = psEliminaEmpleado.executeUpdate();
+	        
+	        if (empleado.getDepartamento() != null && empleado.getDepartamento().getJefe() != null && empleado.getDepartamento().getJefe().getId() == empleado.getId()){
+	            PreparedStatement psActualizaDepartamento = conn.prepareStatement(sqlActualizaDepartamento);
+	            psActualizaDepartamento.setInt(1, empleado.getId());
+	            psActualizaDepartamento.executeUpdate();
+	        }
+	        
+	        return filasEliminadas > 0;
+	        
+	    } catch (SQLException e) {
+	        return false;
+	    }
 	}
 
 	/**
@@ -129,6 +139,30 @@ public class Empresa {
 		return false;
 	}
 
+	 /*
+	 * Actualiza la informacion de un departamento
+  	 * @return false si no se llega a ejecutar la actualización
+	 */
+	
+		public boolean updateDepartamento(Departamento departamento) {
+	    String sql = "UPDATE departamento SET nombre = ?, jefe = ? WHERE id = ?";
+	    
+	    try {
+	    	
+	        PreparedStatement ps = conn.prepareStatement(sql);
+	        ps.setString(1, departamento.getNombre());
+	        ps.setInt(2, departamento.getJefe().getId());
+	        ps.setInt(3, departamento.getId());
+	        
+	        int filasActualizadas = ps.executeUpdate();
+	        
+	        return filasActualizadas > 0;
+	        
+	    } catch (SQLException e) {
+	    }
+	    return false;
+	}
+	
 	/**
 	 * Mostrar los departamentos
 	 * 
