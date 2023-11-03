@@ -2,10 +2,13 @@ package controlador;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import modelo.Departamento;
 import modelo.Empleado;
+
 
 public class Empresa {
 	private Connection conn = null;
