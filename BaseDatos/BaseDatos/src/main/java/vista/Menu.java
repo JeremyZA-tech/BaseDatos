@@ -75,7 +75,7 @@ public class Menu {
                 	eliminarDepartamento(empresa);
                 	break;
                 case 4:
-                	
+                	actualizarDepartamento(empresa);
                 	break;
                 default:
                     System.out.println("Opción no válida. Intente de nuevo.");
@@ -101,21 +101,21 @@ public class Menu {
             }
 
             switch (opcion) {
-                case 1:
-
-                	break;
-                case 2:
-
-                	break;
-                case 3:
-
-                	break;
-                case 4:
-
-                	break;
-                default:
-                    System.out.println("Opción no válida. Intente de nuevo.");
-                    break;
+            case 1:
+            	añadirEmpleado(empresa);
+            	break;
+            case 2:
+            	mostrarEmpleados(empresa);
+            	break;
+            case 3:
+            	eliminarEmpleado(empresa);
+            	break;
+            case 4:
+            	actualizarEmpleado(empresa);
+            	break;
+            default:
+                System.out.println("Opción no válida. Intente de nuevo.");
+                break;
             }
         }
     }
@@ -171,5 +171,22 @@ public class Menu {
             System.out.println("Ha ocurrido un error al eliminar el departamento");
         }
     }
+
+    private static void actualizarDepartamento(Empresa empresa) {}
+    private static void añadirEmpleado(Empresa empresa) {}
+    private static void mostrarEmpleados(Empresa empresa) {}
+
+    private static void eliminarEmpleado(Empresa empresa, Int empleadoId) {
+    	
+        boolean empleadoEliminado = empresa.deleteEmpleado(empleadoId);
+
+        if (empleadoEliminado) {
+            System.out.println("Se ha eliminado al empleado con éxito.");
+        } else {
+            System.out.println("No se ha podido eliminar al empleado.");
+        }
+    }
+
+    private static void actualizarEmpleado(Empresa empresa) {}
 	
 }
