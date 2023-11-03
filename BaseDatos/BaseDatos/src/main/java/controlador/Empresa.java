@@ -102,14 +102,28 @@ public class Empresa {
 	 * @return true si es borrado, false en caso contrario
 	 */
 	public boolean deleteDepartamento(String id) {
-		String sql = """
-				DELETE FROM departamento
-				WHERE id = ?
+		String sqlEliminaDepartamento = """
+				DELETE FROM departamento WHERE id = ?
 				""";
+		String sqlActualizaEmpleados = """
+				UPDATE empleado SET departamento = NULL WHERE departamento = ?
+				""";
+		
 		try {
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, id);
-			return ps.executeUpdate() > 0;
+			
+			PreparedStatement psEliminaDepartamento = conn.prepareStatement(sqlEliminaDepartamento);
+			psEliminaDepartamento.setInt(1, id);
+			int filasEliminadas = psEliminaDepartamento.executeUpdate();
+			
+			if (filasEliminadas > 0) {
+				
+				PreparedStatement psActualizaEmpleados = conn.prepareStatement(sqlActualizaEmpleados);
+				psActualizaEmpleados.setInt(1, id);
+				psActualizaEmpleados.executeUpdate();
+			}
+			
+			return filasEliminadas > 0;
+			
 		} catch (SQLException e) {
 		}
 		return false;
